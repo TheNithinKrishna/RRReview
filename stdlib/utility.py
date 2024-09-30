@@ -570,7 +570,7 @@ def checkIsAccepted(client_data, address, portal):
         logging.info(f"Exception in checkIsAccepted: {ex}")
         exception_mail_send(portal,client_data['Client_name'],ex)
 
-def ignored_order(address,ordertype,ignored_msg,fee_portal,clientData,portal,zipcode,subject,order_received_time,subjectline):
+def ignored_order(address,ordertype,ignored_msg,fee_portal,clientData,portal,zipcode,subject,order_received_time):
     """This Function is used to Send Ignored order Emails"""
     logging.info(ignored_msg)
     common_db_data=cursorexec("order_updation",'SELECT',"""SELECT * FROM `common_data_acceptance` """)
@@ -586,11 +586,11 @@ def ignored_order(address,ordertype,ignored_msg,fee_portal,clientData,portal,zip
                 if acceptedFlag:
                     expireMessage = 'Orders Expired due to Accepted by Other Client'
                     logging.info("Orders accepted by other client")
-                    cursorexec("order_updation","INSERT","INSERT INTO `Ignored_orders`(`client_Name`, `Address`, `Portal`,`ignored_reason`,`ordertype`,`orderfee`,`order_zipcode`,`order_received_time`,`process_completed_time`,`client_type`,`subjectline`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(clientData['Client_name'],address,portal,expireMessage,ordertype,fee_portal,zipcode,str(order_received_time),str(process_completed_time),clientData['client_type'],subjectline))
+                    cursorexec("order_updation","INSERT","INSERT INTO `Ignored_orders`(`client_Name`, `Address`, `Portal`,`ignored_reason`,`ordertype`,`orderfee`,`order_zipcode`,`order_received_time`,`process_completed_time`,`client_type`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(clientData['Client_name'],address,portal,expireMessage,ordertype,fee_portal,zipcode,str(order_received_time),str(process_completed_time),clientData['client_type']))
                 else:
-                    cursorexec("order_updation","INSERT","INSERT INTO `Ignored_orders`(`client_Name`, `Address`, `Portal`,`ignored_reason`,`ordertype`,`orderfee`,`order_zipcode`,`order_received_time`,`process_completed_time`,`client_type`,`subjectline`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(clientData['Client_name'],address,portal,ignored_msg,ordertype,fee_portal,zipcode,str(order_received_time),str(process_completed_time),clientData['client_type'],subjectline))
+                    cursorexec("order_updation","INSERT","INSERT INTO `Ignored_orders`(`client_Name`, `Address`, `Portal`,`ignored_reason`,`ordertype`,`orderfee`,`order_zipcode`,`order_received_time`,`process_completed_time`,`client_type`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(clientData['Client_name'],address,portal,ignored_msg,ordertype,fee_portal,zipcode,str(order_received_time),str(process_completed_time),clientData['client_type']))
             else:
-                cursorexec("order_updation","INSERT","INSERT INTO `Ignored_orders`(`client_Name`, `Address`, `Portal`,`ignored_reason`,`ordertype`,`orderfee`,`order_zipcode`,`order_received_time`,`process_completed_time`,`client_type`,`subjectline`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(clientData['Client_name'],address,portal,ignored_msg,ordertype,fee_portal,zipcode,str(order_received_time),str(process_completed_time),clientData['client_type'],subjectline))
+                cursorexec("order_updation","INSERT","INSERT INTO `Ignored_orders`(`client_Name`, `Address`, `Portal`,`ignored_reason`,`ordertype`,`orderfee`,`order_zipcode`,`order_received_time`,`process_completed_time`,`client_type`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(clientData['Client_name'],address,portal,ignored_msg,ordertype,fee_portal,zipcode,str(order_received_time),str(process_completed_time),clientData['client_type']))
             if 'Bang' in clientData['Client_name']:
                 mail = sender.Mail('smtp.gmail.com', email_creds['ignored_bang_mail'] , email_creds['ignored_bang_mail_password'], 465, use_ssl=True,fromaddr=email_creds['ignored_bang_mail'])
                 logging.info('Connected to email')
